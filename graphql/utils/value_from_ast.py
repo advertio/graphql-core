@@ -14,6 +14,9 @@ def value_from_ast(value_ast, type, variables=None):
     if value_ast is None:
         return None
 
+    if isinstance(value_ast, ast.NullValue):
+        return None
+
     if isinstance(value_ast, ast.Variable):
         variable_name = value_ast.name.value
         if not variables or variable_name not in variables:

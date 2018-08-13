@@ -15,7 +15,7 @@ def ast_from_value(value, type=None):
         return ast_from_value(value, type.of_type)
 
     if value is None:
-        return None
+        return ast.NullValue()
 
     if isinstance(value, list):
         item_type = type.of_type if isinstance(type, GraphQLList) else None

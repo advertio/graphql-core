@@ -9,15 +9,15 @@ _empty_list = []
 def is_valid_literal_value(type, value_ast):
     if isinstance(type, GraphQLNonNull):
         of_type = type.of_type
-        if not value_ast:
-            return [u'Expected "{}", found null.'.format(type)]
+        if not value_ast or isinstance(value_ast, ast.NullValue):
+            return [u'Expected type "{}", found null.'.format(type)]
 
         return is_valid_literal_value(of_type, value_ast)
 
     if not value_ast:
         return _empty_list
 
-    if isinstance(value_ast, ast.Variable):
+    if isinstance(value_ast, (ast.Variable, ast.NullValue)):
         return _empty_list
 
     if isinstance(type, GraphQLList):

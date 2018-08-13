@@ -89,6 +89,15 @@ class TestValidValues(object):
         }
         ''')
 
+    def test_null_nullable_int_value(self):
+        expect_passes_rule(ArgumentsOfCorrectType, '''
+        {
+            complicatedArgs {
+                intArgField(intArg: null)
+            }
+        }
+        ''')
+
 
 # noinspection PyMethodMayBeStatic
 class TestInvalidStringValues(object):
@@ -194,6 +203,17 @@ class TestInvalidIntValues(object):
         }
         ''', [
             bad_value('intArg', 'Int', '3.333', 4, 37)
+        ])
+
+    def test_null_into_non_null_int(self):
+        expect_fails_rule(ArgumentsOfCorrectType, '''
+        {
+            complicatedArgs {
+                nonNullIntArgField(nonNullIntArg: null)
+            }
+        }
+        ''', [
+            bad_value('nonNullIntArg', 'Int!', 'null', 4, 51)
         ])
 
 
@@ -642,7 +662,7 @@ class TestInvalidInputObjectValue(object):
         }
         ''', [
             bad_value('complexArg', 'ComplexInput', '{intField: 4}', 4, 45, [
-                'In field "requiredField": Expected "Boolean!", found null.'
+                'In field "requiredField": Expected type "Boolean!", found null.'
             ])
         ])
 

@@ -414,13 +414,15 @@ def parse_value_literal(parser, is_const):
         return ast.StringValue(value=token.value, loc=loc(parser, token.start))
 
     elif token.kind == TokenKind.NAME:
+        advance(parser)
+
         if token.value in ('true', 'false'):
-            advance(parser)
             return ast.BooleanValue(value=token.value == 'true', loc=loc(parser, token.start))
 
-        if token.value != 'null':
-            advance(parser)
-            return ast.EnumValue(value=token.value, loc=loc(parser, token.start))
+        if token.value == 'null':
+            return ast.NullValue(loc=loc(parser, token.start))
+
+        return ast.EnumValue(value=token.value, loc=loc(parser, token.start))
 
     elif token.kind == TokenKind.DOLLAR:
         if not is_const:

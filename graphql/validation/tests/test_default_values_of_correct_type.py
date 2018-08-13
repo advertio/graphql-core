@@ -87,7 +87,7 @@ def test_variables_missing_required_field():
     }
     ''', [
         bad_value('a', 'ComplexInput', '{intField: 3}', 2, 51, [
-            'In field "requiredField": Expected "Boolean!", found null.'
+            'In field "requiredField": Expected type "Boolean!", found null.'
         ])
     ])
 
