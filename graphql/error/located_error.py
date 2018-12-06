@@ -15,7 +15,7 @@ class GraphQLLocatedError(GraphQLError):
     def __init__(self, nodes, original_error=None):
         if original_error:
 
-            if getattr(original_error, "outgoing", False):
+            if getattr(original_error, "is_outgoing", False):
                 level = logging.INFO
                 exc_info = False
                 try:
@@ -24,7 +24,7 @@ class GraphQLLocatedError(GraphQLError):
                     message = original_error.message.encode('utf-8')
 
             else:
-                level = logging.ERROR
+                level = logging.WARNING
                 exc_info = sys.exc_info()
                 if exc_info[0] is None:
                     exc_info = False
