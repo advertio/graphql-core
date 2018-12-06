@@ -15,21 +15,21 @@ class GraphQLLocatedError(GraphQLError):
     def __init__(self, nodes, original_error=None):
         if original_error:
 
-            if getattr(original_error, "is_outgoing", default=False):
-                level = logging.INFO
-                exc_info = False
-                try:
-                    message = str(original_error)
-                except UnicodeEncodeError:
-                    message = original_error.message.encode('utf-8')
-
-            else:
+            if not getattr(original_error, "is_outgoing", False):
                 level = logging.ERROR
                 exc_info = sys.exc_info()
                 if exc_info[0] is None:
                     exc_info = False
 
                 message = DEFAULT_OUTGOING_ERROR_STRING
+
+            else:
+                level = logging.INFO
+                exc_info = False
+                try:
+                    message = str(original_error)
+                except UnicodeEncodeError:
+                    message = original_error.message.encode('utf-8')
 
             logger.log(
                 level,
