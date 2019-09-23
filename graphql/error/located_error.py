@@ -17,9 +17,7 @@ class GraphQLLocatedError(GraphQLError):
 
             if not getattr(original_error, "is_outgoing", False):
                 level = logging.ERROR
-                exc_info = sys.exc_info()
-                if exc_info[0] is None:
-                    exc_info = False
+                exc_info = original_error
 
                 message = DEFAULT_OUTGOING_ERROR_STRING
 
@@ -46,10 +44,15 @@ class GraphQLLocatedError(GraphQLError):
         else:
             message = 'An unknown error occurred.'
 
-        if hasattr(original_error, 'stack'):
-            stack = original_error.stack
-        else:
-            stack = sys.exc_info()[2]
+        stack = (
+            original_error
+            and (
+                getattr(original_error, "stack", None)
+                # unfortunately, this is only available in Python 3:
+                or getattr(original_error, "__traceback__", None)
+            )
+            or sys.exc_info()[2]
+        )
 
         super(GraphQLLocatedError, self).__init__(
             message=message,
