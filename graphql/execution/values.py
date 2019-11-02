@@ -112,14 +112,10 @@ def get_argument_values(arg_defs, arg_asts, variables=None):
                 arg_type,
                 variables
             )
-            if value is None:
-                if arg_def.default_value is not None:
-                    value = arg_def.default_value
-                    result[arg_def.out_name or name] = value
-            else:
-                # We use out_name as the output name for the
-                # dict if exists
-                result[arg_def.out_name or name] = value
+
+            # We use out_name as the output name for the
+            # dict if exists
+            result[arg_def.out_name or name] = value
 
     return result
 
