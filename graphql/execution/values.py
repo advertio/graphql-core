@@ -35,32 +35,32 @@ def get_variable_values(schema, definition_asts, inputs):
                 ),
                 [def_ast]
             )
-        # elif value is None:
-        #     if def_ast.default_value is not None:
-        #         values[var_name] = value_from_ast(def_ast.default_value, var_type)
-        #     if isinstance(var_type, GraphQLNonNull):
-        #         raise GraphQLError(
-        #             'Variable "${var_name}" of required type "{var_type}" was not provided.'.format(
-        #                 var_name=var_name, var_type=var_type
-        #             ), [def_ast]
-        #         )
-        # else:
-        errors = is_valid_value(value, var_type)
-        if errors:
-            message = u'\n' + u'\n'.join(errors)
-            raise GraphQLError(
-                'Variable "${}" got invalid value {}.{}'.format(
-                    var_name,
-                    json.dumps(value, sort_keys=True),
-                    message
-                ),
-                [def_ast]
-            )
-        coerced_value = coerce_value(var_type, value)
-        # if coerced_value is None:
-        #     raise Exception('Should have reported error.')
+        elif value is None:
+            # if def_ast.default_value is not None:
+            values[var_name] = value_from_ast(def_ast.default_value, var_type)
+            if isinstance(var_type, GraphQLNonNull):
+                raise GraphQLError(
+                    'Variable "${var_name}" of required type "{var_type}" was not provided.'.format(
+                        var_name=var_name, var_type=var_type
+                    ), [def_ast]
+                )
+        else:
+            errors = is_valid_value(value, var_type)
+            if errors:
+                message = u'\n' + u'\n'.join(errors)
+                raise GraphQLError(
+                    'Variable "${}" got invalid value {}.{}'.format(
+                        var_name,
+                        json.dumps(value, sort_keys=True),
+                        message
+                    ),
+                    [def_ast]
+                )
+            coerced_value = coerce_value(var_type, value)
+            # if coerced_value is None:
+            #     raise Exception('Should have reported error.')
 
-        values[var_name] = coerced_value
+            values[var_name] = coerced_value
 
     return values
 
