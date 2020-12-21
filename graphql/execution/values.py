@@ -57,8 +57,8 @@ def get_variable_values(schema, definition_asts, inputs):
                 [def_ast]
             )
         coerced_value = coerce_value(var_type, value)
-        if coerced_value is None:
-            raise Exception('Should have reported error.')
+        # if coerced_value is None:
+        #     raise Exception('Should have reported error.')
 
         values[var_name] = coerced_value
 
